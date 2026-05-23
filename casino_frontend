@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Casino Site</title>
+</head>
+<body>
+
+  <h1>Casino Dice</h1>
+
+  <p id="status">Loading...</p>
+
+  <button onclick="checkBackend()">
+    Test Backend
+  </button>
+
+  <script>
+    async function checkBackend() {
+
+      const response = await fetch("https://casino-backend-hhbs.onrender.com");
+
+      const text = await response.text();
+
+      document.getElementById("status").innerText = text;
+    }
+  </script>
+
+</body>
+</html>
