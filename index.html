@@ -1,27 +1,44 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Casino Site</title>
+  <title>Casino Dice</title>
 </head>
 <body>
 
   <h1>Casino Dice</h1>
 
-  <p id="status">Loading...</p>
+  <p id="status">Loading backend...</p>
 
-  <button onclick="checkBackend()">
-    Test Backend
-  </button>
+  <input id="amount" type="number" placeholder="Bet amount" />
+  <button onclick="bet()">Roll Dice</button>
+
+  <p id="result"></p>
 
   <script>
-    async function checkBackend() {
+    const API = "https://casino-backend-hhbs.onrender.com";
 
-      const response = await fetch("https://casino-backend-hhbs.onrender.com");
-
-      const text = await response.text();
-
+    async function check() {
+      const res = await fetch(API + "/");
+      const text = await res.text();
       document.getElementById("status").innerText = text;
     }
+
+    async function bet() {
+      const amount = Number(document.getElementById("amount").value);
+
+      const res = await fetch(API + "/bet", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount })
+      });
+
+      const data = await res.json();
+
+      document.getElementById("result").innerText =
+        `Roll: ${data.roll} | Win: ${data.win} | Balance: ${data.balance}`;
+    }
+
+    check();
   </script>
 
 </body>
