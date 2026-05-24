@@ -9,91 +9,146 @@
       font-family: Arial;
       background: radial-gradient(circle at top, #0b0f1a, #05060a);
       color: white;
-      text-align: center;
+      overflow: hidden;
     }
 
-    h1 {
+    /* TOP BAR */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 25px;
+      background: rgba(255,255,255,0.03);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .logo {
       color: #00f5ff;
-      margin-top: 40px;
+      font-weight: bold;
       letter-spacing: 3px;
     }
 
-    input {
-      padding: 10px;
-      border-radius: 10px;
-      border: none;
-      background: rgba(255,255,255,0.05);
-      color: white;
-      margin-top: 20px;
+    /* LAYOUT */
+    .layout {
+      display: flex;
+      height: 100vh;
     }
 
-    button {
-      padding: 10px 20px;
-      margin-left: 10px;
+    /* SIDEBAR */
+    .sidebar {
+      width: 200px;
+      padding: 20px;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
+    }
+
+    .item {
+      padding: 12px;
+      margin: 10px 0;
       border-radius: 10px;
-      border: none;
       cursor: pointer;
-      background: linear-gradient(90deg, #6c2bd9, #00f5ff);
-      color: white;
+      transition: 0.2s;
     }
 
-    button:hover {
+    .item:hover {
+      background: rgba(108,43,217,0.3);
+    }
+
+    /* MAIN AREA */
+    .main {
+      flex: 1;
+      padding: 30px;
+      overflow-y: auto;
+    }
+
+    /* GAME GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .card {
+      height: 140px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(0,245,255,0.2);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .card:hover {
       transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0,245,255,0.2);
     }
 
-    #result {
-      margin-top: 20px;
-      color: #00f5ff;
+    /* RIGHT PANEL */
+    .right {
+      width: 220px;
+      padding: 20px;
+      background: rgba(255,255,255,0.02);
+      backdrop-filter: blur(10px);
     }
+
+    .live {
+      font-size: 12px;
+      opacity: 0.8;
+      margin: 10px 0;
+    }
+
   </style>
 </head>
 
 <body>
 
-  <h1>AETHERBET</h1>
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="logo">AETHERBET</div>
+    <div>Balance: 100</div>
+  </div>
 
-  <p id="status">Connecting...</p>
+  <!-- MAIN LAYOUT -->
+  <div class="layout">
 
-  <input id="amount" type="number" placeholder="Bet amount">
-  <button onclick="bet()">Roll</button>
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar">
+      <div class="item">Home</div>
+      <div class="item">Dice</div>
+      <div class="item">Crash</div>
+      <div class="item">Slots</div>
+      <div class="item">Plinko</div>
+    </div>
 
-  <div id="result"></div>
+    <!-- MAIN -->
+    <div class="main">
 
-  <script>
-    const API = "https://casino-backend-hhbs.onrender.com";
+      <h2>Games</h2>
 
-    async function check() {
-      try {
-        const res = await fetch(API + "/");
-        const text = await res.text();
-        document.getElementById("status").innerText = text;
-      } catch (e) {
-        document.getElementById("status").innerText = "Backend offline";
-      }
-    }
+      <div class="grid">
+        <div class="card">🎲 Dice</div>
+        <div class="card">🚀 Crash</div>
+        <div class="card">🎰 Slots</div>
+        <div class="card">⚡ Plinko</div>
+        <div class="card">🌌 Roulette</div>
+        <div class="card">🪐 Mines</div>
+      </div>
 
-    async function bet() {
-      const amount = Number(document.getElementById("amount").value);
+    </div>
 
-      const res = await fetch(API + "/bet", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ amount })
-      });
+    <!-- RIGHT -->
+    <div class="right">
+      <h3>Live Wins</h3>
+      <div class="live">Nova won 2.1x</div>
+      <div class="live">Astra hit 5.6x</div>
+      <div class="live">Void won 1.9x</div>
+    </div>
 
-      const data = await res.json();
-
-      if (data.error) {
-        document.getElementById("result").innerText = data.error;
-        return;
-      }
-
-      document.getElementById("result").innerText =
-        `Roll: ${data.roll} | ${data.win ? "WIN" : "LOSE"} | Balance: ${data.balance}`;
-    }
-
-    check();
-  </script>
+  </div>
 
 </body>
 </html>
