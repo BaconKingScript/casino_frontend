@@ -7,20 +7,19 @@
     body {
       margin: 0;
       font-family: Arial;
-      background:
-        radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 40%),
-        radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 45%),
-        #05060a;
+      background: radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 40%),
+                  radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 45%),
+                  #05060a;
       color: white;
       overflow: hidden;
     }
 
     .topbar {
-      height: 56px;
+      height: 50px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 18px;
+      padding: 0 16px;
       background: rgba(10,12,18,0.75);
       border-bottom: 1px solid rgba(255,255,255,0.05);
     }
@@ -28,38 +27,58 @@
     .logo {
       color: #00f5ff;
       font-weight: bold;
-      cursor: pointer;
       letter-spacing: 2px;
-    }
-
-    .wallet {
-      font-size: 12px;
-      opacity: 0.8;
+      cursor: pointer;
     }
 
     .layout {
       display: flex;
-      height: calc(100vh - 56px);
+      height: calc(100vh - 50px);
     }
 
-    .sidebar {
-      width: 180px;
-      padding: 12px;
-      background: rgba(10,12,18,0.5);
+    /* LEFT PANEL (STAKE STYLE CONTROLS) */
+    .left {
+      width: 280px;
+      padding: 14px;
+      background: rgba(10,12,18,0.6);
+      border-right: 1px solid rgba(255,255,255,0.05);
     }
 
-    .nav {
+    .section {
+      margin-bottom: 12px;
+    }
+
+    input {
+      width: 100%;
       padding: 10px;
+      margin-top: 6px;
+      border-radius: 8px;
+      border: none;
+      background: rgba(255,255,255,0.05);
+      color: white;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 6px;
+      border: none;
+      border-radius: 8px;
       cursor: pointer;
-      opacity: 0.7;
+      background: linear-gradient(90deg,#6c2bd9,#00f5ff);
+      color: white;
     }
 
-    .nav:hover {
-      opacity: 1;
-      background: rgba(0,245,255,0.08);
+    .toggle {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      opacity: 0.8;
+      margin-top: 6px;
     }
 
-    .main {
+    /* RIGHT SIDE GAME */
+    .right {
       flex: 1;
       padding: 18px;
     }
@@ -67,39 +86,31 @@
     .page { display: none; }
     .active { display: block; }
 
-    input {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      background: rgba(255,255,255,0.05);
-      color: white;
-      margin-top: 8px;
-    }
-
-    button {
-      padding: 10px 14px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: linear-gradient(90deg,#6c2bd9,#00f5ff);
-      color: white;
-      margin-top: 8px;
-    }
-
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      grid-template-columns: repeat(5, 50px);
+      gap: 8px;
     }
 
-    .card {
-      height: 110px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255,255,255,0.03);
-      border-radius: 10px;
+    .tile {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      border: none;
       cursor: pointer;
+      background: rgba(255,255,255,0.05);
+      color: white;
+    }
+
+    .nav {
+      font-size: 12px;
+      opacity: 0.7;
+      cursor: pointer;
+      margin: 6px 0;
+    }
+
+    .nav:hover {
+      opacity: 1;
     }
   </style>
 </head>
@@ -107,70 +118,66 @@
 <body>
 
 <div class="topbar">
-  <div class="logo" onclick="go('home')">AETHERBET</div>
-  <div class="wallet">Balance: <span id="bal">100</span></div>
+  <div class="logo" onclick="go('dice')">AETHERBET</div>
+  <div>Balance: <span id="bal">100</span></div>
 </div>
 
 <div class="layout">
 
-  <div class="sidebar">
-    <div class="nav" onclick="go('home')">Home</div>
-    <div class="nav" onclick="go('dice')">Dice</div>
-    <div class="nav" onclick="go('crash')">Crash</div>
-    <div class="nav" onclick="go('slots')">Slots</div>
-    <div class="nav" onclick="go('mines')">Mines</div>
-  </div>
+  <!-- LEFT CONTROL PANEL -->
+  <div class="left">
 
-  <div class="main">
-
-    <!-- HOME -->
-    <div id="home" class="page active">
-      <h2>Games</h2>
-      <div class="grid">
-        <div class="card" onclick="go('dice')">Dice</div>
-        <div class="card" onclick="go('crash')">Crash</div>
-        <div class="card" onclick="go('slots')">Slots</div>
-        <div class="card" onclick="go('mines')">Mines</div>
-      </div>
+    <div class="section">
+      <div class="nav" onclick="go('dice')">Dice</div>
+      <div class="nav" onclick="go('crash')">Crash</div>
+      <div class="nav" onclick="go('slots')">Slots</div>
+      <div class="nav" onclick="go('mines')">Mines</div>
     </div>
 
-    <!-- DICE -->
-    <div id="dice" class="page">
+    <div class="section">
+      <input id="bet" type="number" placeholder="Bet amount">
+
+      <div class="toggle">
+        <span>AutoBet</span>
+        <input type="checkbox" id="auto">
+      </div>
+
+      <button onclick="runGame()">Play</button>
+    </div>
+
+    <p id="info"></p>
+
+  </div>
+
+  <!-- RIGHT GAME AREA -->
+  <div class="right">
+
+    <div id="dice" class="page active">
       <h2>Dice</h2>
-      <input id="bet" type="number" placeholder="Bet">
-      <button onclick="dice()">Roll</button>
       <p id="diceRes"></p>
     </div>
 
-    <!-- CRASH -->
     <div id="crash" class="page">
       <h2>Crash</h2>
-      <input id="bet2" type="number" placeholder="Bet">
-      <button onclick="crash()">Start</button>
       <p id="crashRes"></p>
     </div>
 
-    <!-- SLOTS -->
     <div id="slots" class="page">
       <h2>Slots</h2>
-      <input id="bet3" type="number" placeholder="Bet">
-      <button onclick="slots()">Spin</button>
       <p id="slotsRes"></p>
     </div>
 
-    <!-- MINES -->
     <div id="mines" class="page">
       <h2>Mines</h2>
 
-      <input id="mineBet" type="number" placeholder="Bet">
       <input id="mineCount" type="number" value="3" placeholder="Mines">
 
-      <button onclick="startMines()">Start</button>
+      <button onclick="startMines()">Start Mines</button>
       <button onclick="cashout()" id="cashBtn" disabled>Cashout</button>
 
-      <p id="mult">Multiplier: x1.00</p>
+      <p id="mult">x1.00</p>
 
-      <div id="grid" style="display:grid;grid-template-columns:repeat(5,50px);gap:8px;margin-top:10px;"></div>
+      <div id="grid" class="grid"></div>
 
       <p id="mineRes"></p>
     </div>
@@ -181,89 +188,122 @@
 <script>
 
 let balance = 100;
+let mode = "dice";
+let auto = false;
 
 /* NAV */
 function go(p){
+  mode = p;
   document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.getElementById(p).classList.add("active");
 }
 
 /* BAL */
-function updateBal(){
+function update(){
   document.getElementById("bal").innerText = balance;
 }
 
+/* MAIN RUN */
+function runGame(){
+  auto = document.getElementById("auto").checked;
+
+  play();
+
+  if(auto){
+    let i = setInterval(()=>{
+      if(!auto) clearInterval(i);
+      play();
+    }, 1200);
+  }
+}
+
+/* GAME ROUTER */
+function play(){
+  let bet = Number(document.getElementById("bet").value);
+  if(!bet || bet > balance) return;
+
+  if(mode === "dice") dice(bet);
+  if(mode === "crash") crash(bet);
+  if(mode === "slots") slots(bet);
+}
+
 /* DICE */
-function dice(){
-  let b=Number(document.getElementById("bet").value);
-  if(!b||b>balance)return;
+function dice(bet){
+  let r = Math.random()*100;
 
-  let r=Math.random()*100;
+  if(r < 50){
+    balance += bet;
+    document.getElementById("diceRes").innerText = "WIN " + r.toFixed(2);
+  } else {
+    balance -= bet;
+    document.getElementById("diceRes").innerText = "LOSE " + r.toFixed(2);
+  }
 
-  if(r<50){balance+=b;document.getElementById("diceRes").innerText="WIN "+r.toFixed(2);}
-  else{balance-=b;document.getElementById("diceRes").innerText="LOSE "+r.toFixed(2);}
-
-  updateBal();
+  update();
 }
 
 /* CRASH */
-function crash(){
-  let b=Number(document.getElementById("bet2").value);
-  if(!b||b>balance)return;
+function crash(bet){
+  let x = Math.random()*5+1;
 
-  let x=Math.random()*5+1;
+  if(x > 2){
+    balance += bet * x;
+    document.getElementById("crashRes").innerText = "WIN x" + x.toFixed(2);
+  } else {
+    balance -= bet;
+    document.getElementById("crashRes").innerText = "LOSE x" + x.toFixed(2);
+  }
 
-  if(x>2){balance+=b*x;document.getElementById("crashRes").innerText="WIN x"+x.toFixed(2);}
-  else{balance-=b;document.getElementById("crashRes").innerText="LOSE x"+x.toFixed(2);}
-
-  updateBal();
+  update();
 }
 
 /* SLOTS */
-function slots(){
-  let b=Number(document.getElementById("bet3").value);
-  if(!b||b>balance)return;
-
+function slots(bet){
   let s=["🍒","💎","7","🍋"];
+
   let a=s[Math.floor(Math.random()*s.length)];
+  let b=s[Math.floor(Math.random()*s.length)];
   let c=s[Math.floor(Math.random()*s.length)];
-  let d=s[Math.floor(Math.random()*s.length)];
 
-  let res=a+c+d;
+  let r=a+b+c;
 
-  if(a===c&&c===d){balance+=b*3;document.getElementById("slotsRes").innerText=res+" WIN";}
-  else{balance-=b;document.getElementById("slotsRes").innerText=res+" LOSE";}
+  if(a===b&&b===c){
+    balance += bet*3;
+    document.getElementById("slotsRes").innerText = r+" WIN";
+  } else {
+    balance -= bet;
+    document.getElementById("slotsRes").innerText = r+" LOSE";
+  }
 
-  updateBal();
+  update();
 }
 
 /* MINES */
-let mines=[],bet=0,mineCount=3,gameOn=false,revealed=0,mult=1;
+let mines=[],bet=0,mult=1,gameOn=false,rev=0;
 
 function startMines(){
-  bet=Number(document.getElementById("mineBet").value);
-  mineCount=Number(document.getElementById("mineCount").value);
+  bet = Number(document.getElementById("bet").value);
+  let m = Number(document.getElementById("mineCount").value);
 
-  if(!bet||bet>balance)return;
+  if(!bet || bet > balance) return;
 
-  balance-=bet;
-  updateBal();
+  balance -= bet;
+  update();
 
-  mines=[];revealed=0;mult=1;gameOn=true;
+  mines=[];rev=0;mult=1;gameOn=true;
 
   document.getElementById("cashBtn").disabled=false;
   document.getElementById("mineRes").innerText="";
 
-  for(let i=0;i<25;i++)mines[i]=false;
+  for(let i=0;i<25;i++) mines[i]=false;
 
   let p=0;
-  while(p<mineCount){
+  while(p<m){
     let i=Math.floor(Math.random()*25);
     if(!mines[i]){mines[i]=true;p++;}
   }
 
   render();
-  updateMult();
 }
 
 function render(){
@@ -272,6 +312,7 @@ function render(){
 
   for(let i=0;i<25;i++){
     let b=document.createElement("button");
+    b.className="tile";
     b.innerText="?";
     b.onclick=()=>click(i,b);
     g.appendChild(b);
@@ -279,7 +320,7 @@ function render(){
 }
 
 function click(i,b){
-  if(!gameOn)return;
+  if(!gameOn) return;
 
   if(mines[i]){
     b.innerText="💣";
@@ -292,21 +333,17 @@ function click(i,b){
   b.innerText="💎";
   b.disabled=true;
 
-  revealed++;
+  rev++;
+  mult = 1 + rev * 0.4;
 
-  mult=1+revealed*0.35;
-  updateMult();
-}
-
-function updateMult(){
-  document.getElementById("mult").innerText="Multiplier: x"+mult.toFixed(2);
+  document.getElementById("mult").innerText="x"+mult.toFixed(2);
 }
 
 function cashout(){
-  if(!gameOn)return;
+  if(!gameOn) return;
 
-  balance+=bet*mult;
-  updateBal();
+  balance += bet * mult;
+  update();
 
   document.getElementById("mineRes").innerText="CASHED OUT";
   gameOn=false;
@@ -314,11 +351,12 @@ function cashout(){
 }
 
 function reveal(){
-  let bs=document.querySelectorAll("#grid button");
-  bs.forEach((b,i)=>{if(mines[i])b.innerText="💣";});
+  document.querySelectorAll("#grid button").forEach((b,i)=>{
+    if(mines[i]) b.innerText="💣";
+  });
 }
 
-updateBal();
+update();
 
 </script>
 
