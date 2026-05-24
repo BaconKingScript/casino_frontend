@@ -6,32 +6,32 @@
   <style>
     body {
       margin: 0;
-      font-family: Inter, Arial, sans-serif;
+      font-family: Arial;
       background:
-        radial-gradient(circle at 15% 20%, rgba(0,245,255,0.08), transparent 40%),
-        radial-gradient(circle at 85% 10%, rgba(108,43,217,0.10), transparent 45%),
+        radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 45%),
         #05060a;
       color: white;
-      overflow-x: hidden;
+      overflow: hidden;
     }
 
-    /* TOP BAR */
+    /* TOPBAR */
     .topbar {
-      height: 60px;
+      height: 56px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 0 20px;
+      align-items: center;
+      padding: 0 18px;
       background: rgba(10,12,18,0.75);
-      backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255,255,255,0.05);
+      backdrop-filter: blur(12px);
     }
 
     .logo {
       font-weight: 700;
-      letter-spacing: 4px;
+      letter-spacing: 3px;
       color: #00f5ff;
-      font-size: 13px;
+      cursor: pointer;
     }
 
     .wallet {
@@ -42,25 +42,23 @@
     /* LAYOUT */
     .layout {
       display: flex;
-      height: calc(100vh - 60px);
+      height: calc(100vh - 56px);
     }
 
     /* SIDEBAR */
     .sidebar {
-      width: 190px;
-      padding: 14px;
+      width: 180px;
       background: rgba(10,12,18,0.55);
       border-right: 1px solid rgba(255,255,255,0.04);
-      backdrop-filter: blur(14px);
+      padding: 12px;
     }
 
     .nav {
       padding: 10px;
       font-size: 12px;
       opacity: 0.7;
-      border-radius: 8px;
       cursor: pointer;
-      transition: 0.15s;
+      border-radius: 8px;
     }
 
     .nav:hover {
@@ -71,144 +69,167 @@
     /* MAIN */
     .main {
       flex: 1;
-      padding: 20px;
+      padding: 18px;
     }
 
     .title {
-      font-size: 14px;
+      font-size: 13px;
       opacity: 0.7;
-      margin-bottom: 15px;
+      margin-bottom: 14px;
     }
 
-    /* GAME GRID */
+    /* GRID */
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      gap: 12px;
     }
 
     .card {
-      height: 130px;
-      border-radius: 14px;
+      height: 120px;
+      border-radius: 12px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.05);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 14px;
       cursor: pointer;
-      transition: 0.2s;
+      transition: 0.15s;
       position: relative;
-      overflow: hidden;
     }
 
     .card:hover {
       transform: translateY(-3px);
       border-color: rgba(0,245,255,0.25);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
 
-    .card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      width: 100%;
-      height: 2px;
+    /* PAGES */
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      margin-top: 10px;
+    }
+
+    button {
+      padding: 10px 16px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
       background: linear-gradient(90deg, #6c2bd9, #00f5ff);
-      opacity: 0.7;
+      color: white;
     }
 
-    /* RIGHT PANEL */
-    .right {
-      width: 210px;
-      padding: 14px;
-      background: rgba(10,12,18,0.55);
-      border-left: 1px solid rgba(255,255,255,0.04);
-      backdrop-filter: blur(14px);
-    }
-
-    .live-title {
-      font-size: 12px;
-      opacity: 0.6;
-      margin-bottom: 10px;
-    }
-
-    .live {
-      font-size: 11px;
-      opacity: 0.6;
-      margin: 8px 0;
-    }
-
-    /* HERO */
-    .hero {
-      margin-bottom: 18px;
-    }
-
-    .hero h1 {
-      font-size: 22px;
-      margin: 0;
-      color: #00f5ff;
-      letter-spacing: 2px;
-    }
-
-    .hero p {
-      font-size: 12px;
-      opacity: 0.6;
-      margin-top: 5px;
-    }
   </style>
 </head>
 
 <body>
 
-  <!-- TOP -->
-  <div class="topbar">
-    <div class="logo">AETHERBET</div>
-    <div class="wallet">Wallet: 100</div>
+<!-- TOP -->
+<div class="topbar">
+  <div class="logo" onclick="go('home')">AETHERBET</div>
+  <div class="wallet">Balance: <span id="bal">100</span></div>
+</div>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="nav" onclick="go('home')">Home</div>
+    <div class="nav" onclick="go('dice')">Dice</div>
+    <div class="nav" onclick="go('crash')">Crash</div>
+    <div class="nav" onclick="go('slots')">Slots</div>
   </div>
 
-  <!-- BODY -->
-  <div class="layout">
+  <!-- MAIN -->
+  <div class="main">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-      <div class="nav">Home</div>
-      <div class="nav">Dice</div>
-      <div class="nav">Crash</div>
-      <div class="nav">Slots</div>
-      <div class="nav">Plinko</div>
-    </div>
-
-    <!-- MAIN -->
-    <div class="main">
-
-      <div class="hero">
-        <h1>Play Beyond Reality</h1>
-        <p>Cosmic casino experience powered by AetherBet</p>
-      </div>
-
+    <!-- HOME -->
+    <div id="home" class="page active">
       <div class="title">Games</div>
 
       <div class="grid">
-        <div class="card">🎲 Dice</div>
-        <div class="card">🚀 Crash</div>
-        <div class="card">🎰 Slots</div>
-        <div class="card">⚡ Plinko</div>
-        <div class="card">🌌 Roulette</div>
-        <div class="card">🪐 Mines</div>
+        <div class="card" onclick="go('dice')">🎲 Dice</div>
+        <div class="card" onclick="go('crash')">🚀 Crash</div>
+        <div class="card" onclick="go('slots')">🎰 Slots</div>
       </div>
-
     </div>
 
-    <!-- RIGHT -->
-    <div class="right">
-      <div class="live-title">Live Wins</div>
-      <div class="live">Nova hit 2.4x</div>
-      <div class="live">Astra won 5.1x</div>
-      <div class="live">Void hit 1.8x</div>
+    <!-- DICE -->
+    <div id="dice" class="page">
+      <h2>Dice</h2>
+      <input id="bet" type="number" placeholder="Bet">
+      <button onclick="dice()">Roll</button>
+      <p id="diceRes"></p>
+    </div>
+
+    <!-- CRASH -->
+    <div id="crash" class="page">
+      <h2>Crash</h2>
+      <button onclick="crash()">Start</button>
+      <p id="crashRes"></p>
+    </div>
+
+    <!-- SLOTS -->
+    <div id="slots" class="page">
+      <h2>Slots</h2>
+      <button onclick="slots()">Spin</button>
+      <p id="slotsRes"></p>
     </div>
 
   </div>
+</div>
+
+<script>
+let balance = 100;
+
+function go(page) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+}
+
+/* DICE */
+function dice() {
+  let bet = Number(document.getElementById("bet").value);
+  let roll = Math.floor(Math.random() * 100);
+
+  if (!bet) return;
+
+  if (roll < 50) {
+    balance += bet;
+    document.getElementById("diceRes").innerText = "WIN " + roll;
+  } else {
+    balance -= bet;
+    document.getElementById("diceRes").innerText = "LOSE " + roll;
+  }
+
+  document.getElementById("bal").innerText = balance;
+}
+
+/* CRASH */
+function crash() {
+  let x = (Math.random() * 5).toFixed(2);
+  document.getElementById("crashRes").innerText = "x" + x;
+}
+
+/* SLOTS */
+function slots() {
+  let s = ["🍒","💎","7","🍋"];
+  let r = s[Math.floor(Math.random()*s.length)];
+  document.getElementById("slotsRes").innerText = r + r + r;
+}
+</script>
 
 </body>
 </html>
