@@ -7,9 +7,10 @@
     body {
       margin: 0;
       font-family: Arial;
-      background: radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 40%),
-                  radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 45%),
-                  #05060a;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 45%),
+        #05060a;
       color: white;
       overflow: hidden;
     }
@@ -21,12 +22,25 @@
       align-items: center;
       padding: 0 18px;
       background: rgba(10,12,18,0.75);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
 
-    .logo { color: #00f5ff; font-weight: bold; cursor: pointer; }
-    .wallet { font-size: 12px; opacity: 0.8; }
+    .logo {
+      color: #00f5ff;
+      font-weight: bold;
+      cursor: pointer;
+      letter-spacing: 2px;
+    }
 
-    .layout { display: flex; height: calc(100vh - 56px); }
+    .wallet {
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    .layout {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
 
     .sidebar {
       width: 180px;
@@ -40,9 +54,15 @@
       opacity: 0.7;
     }
 
-    .nav:hover { opacity: 1; background: rgba(0,245,255,0.08); }
+    .nav:hover {
+      opacity: 1;
+      background: rgba(0,245,255,0.08);
+    }
 
-    .main { flex: 1; padding: 18px; }
+    .main {
+      flex: 1;
+      padding: 18px;
+    }
 
     .page { display: none; }
     .active { display: block; }
@@ -53,23 +73,23 @@
       border: none;
       background: rgba(255,255,255,0.05);
       color: white;
-      margin-top: 10px;
+      margin-top: 8px;
     }
 
     button {
       padding: 10px 14px;
-      margin-top: 10px;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       background: linear-gradient(90deg,#6c2bd9,#00f5ff);
       color: white;
+      margin-top: 8px;
     }
 
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
 
     .card {
@@ -125,6 +145,7 @@
     <!-- CRASH -->
     <div id="crash" class="page">
       <h2>Crash</h2>
+      <input id="bet2" type="number" placeholder="Bet">
       <button onclick="crash()">Start</button>
       <p id="crashRes"></p>
     </div>
@@ -132,6 +153,7 @@
     <!-- SLOTS -->
     <div id="slots" class="page">
       <h2>Slots</h2>
+      <input id="bet3" type="number" placeholder="Bet">
       <button onclick="slots()">Spin</button>
       <p id="slotsRes"></p>
     </div>
@@ -141,14 +163,14 @@
       <h2>Mines</h2>
 
       <input id="mineBet" type="number" placeholder="Bet">
-      <input id="mineCount" type="number" value="3" placeholder="Mines (1-24)">
+      <input id="mineCount" type="number" value="3" placeholder="Mines">
 
       <button onclick="startMines()">Start</button>
       <button onclick="cashout()" id="cashBtn" disabled>Cashout</button>
 
       <p id="mult">Multiplier: x1.00</p>
 
-      <div id="grid" class="grid" style="margin-top:10px;"></div>
+      <div id="grid" style="display:grid;grid-template-columns:repeat(5,50px);gap:8px;margin-top:10px;"></div>
 
       <p id="mineRes"></p>
     </div>
@@ -159,92 +181,85 @@
 <script>
 
 let balance = 100;
-let mines = [];
-let bet = 0;
-let mineCount = 3;
-let gameOn = false;
-let revealed = 0;
-let mult = 1;
 
 /* NAV */
-function go(p) {
-  document.querySelectorAll(".page").forEach(x => x.classList.remove("active"));
+function go(p){
+  document.querySelectorAll(".page").forEach(x=>x.classList.remove("active"));
   document.getElementById(p).classList.add("active");
 }
 
-/* BALANCE */
-function updateBal() {
+/* BAL */
+function updateBal(){
   document.getElementById("bal").innerText = balance;
 }
 
 /* DICE */
-function dice() {
-  let b = Number(document.getElementById("bet").value);
-  if (!b || b > balance) return;
+function dice(){
+  let b=Number(document.getElementById("bet").value);
+  if(!b||b>balance)return;
 
-  let r = Math.random() * 100;
+  let r=Math.random()*100;
 
-  if (r < 50) {
-    balance += b;
-    document.getElementById("diceRes").innerText = "WIN " + r.toFixed(2);
-  } else {
-    balance -= b;
-    document.getElementById("diceRes").innerText = "LOSE " + r.toFixed(2);
-  }
+  if(r<50){balance+=b;document.getElementById("diceRes").innerText="WIN "+r.toFixed(2);}
+  else{balance-=b;document.getElementById("diceRes").innerText="LOSE "+r.toFixed(2);}
 
   updateBal();
 }
 
 /* CRASH */
-function crash() {
-  document.getElementById("crashRes").innerText =
-    "x" + (Math.random() * 5 + 1).toFixed(2);
+function crash(){
+  let b=Number(document.getElementById("bet2").value);
+  if(!b||b>balance)return;
+
+  let x=Math.random()*5+1;
+
+  if(x>2){balance+=b*x;document.getElementById("crashRes").innerText="WIN x"+x.toFixed(2);}
+  else{balance-=b;document.getElementById("crashRes").innerText="LOSE x"+x.toFixed(2);}
+
+  updateBal();
 }
 
 /* SLOTS */
-function slots() {
-  let s = ["🍒","💎","7","🍋"];
-  let a = s[Math.floor(Math.random()*s.length)];
-  let b = s[Math.floor(Math.random()*s.length)];
-  let c = s[Math.floor(Math.random()*s.length)];
+function slots(){
+  let b=Number(document.getElementById("bet3").value);
+  if(!b||b>balance)return;
 
-  let r = a + b + c;
+  let s=["🍒","💎","7","🍋"];
+  let a=s[Math.floor(Math.random()*s.length)];
+  let c=s[Math.floor(Math.random()*s.length)];
+  let d=s[Math.floor(Math.random()*s.length)];
 
-  if (a===b && b===c) {
-    balance += 20;
-    document.getElementById("slotsRes").innerText = r + " WIN";
-  } else {
-    balance -= 5;
-    document.getElementById("slotsRes").innerText = r + " LOSE";
-  }
+  let res=a+c+d;
+
+  if(a===c&&c===d){balance+=b*3;document.getElementById("slotsRes").innerText=res+" WIN";}
+  else{balance-=b;document.getElementById("slotsRes").innerText=res+" LOSE";}
 
   updateBal();
 }
 
 /* MINES */
-function startMines() {
-  bet = Number(document.getElementById("mineBet").value);
-  mineCount = Number(document.getElementById("mineCount").value);
+let mines=[],bet=0,mineCount=3,gameOn=false,revealed=0,mult=1;
 
-  if (!bet || bet > balance) return;
+function startMines(){
+  bet=Number(document.getElementById("mineBet").value);
+  mineCount=Number(document.getElementById("mineCount").value);
 
-  balance -= bet;
+  if(!bet||bet>balance)return;
+
+  balance-=bet;
   updateBal();
 
-  mines = [];
-  revealed = 0;
-  mult = 1;
-  gameOn = true;
+  mines=[];revealed=0;mult=1;gameOn=true;
 
-  document.getElementById("cashBtn").disabled = false;
-  document.getElementById("mineRes").innerText = "";
+  document.getElementById("cashBtn").disabled=false;
+  document.getElementById("mineRes").innerText="";
 
-  for (let i=0;i<25;i++) mines[i]=false;
+  for(let i=0;i<25;i++)mines[i]=false;
 
-  let placed=0;
-  while (placed<mineCount){
+  let p=0;
+  while(p<mineCount){
     let i=Math.floor(Math.random()*25);
-    if(!mines[i]){mines[i]=true;placed++;}
+    if(!mines[i]){mines[i]=true;p++;}
   }
 
   render();
@@ -258,19 +273,17 @@ function render(){
   for(let i=0;i<25;i++){
     let b=document.createElement("button");
     b.innerText="?";
-
     b.onclick=()=>click(i,b);
-
     g.appendChild(b);
   }
 }
 
 function click(i,b){
-  if(!gameOn) return;
+  if(!gameOn)return;
 
   if(mines[i]){
     b.innerText="💣";
-    document.getElementById("mineRes").innerText="LOST";
+    document.getElementById("mineRes").innerText="LOSE";
     gameOn=false;
     reveal();
     return;
@@ -281,34 +294,28 @@ function click(i,b){
 
   revealed++;
 
-  mult = 1 + revealed * 0.4;
+  mult=1+revealed*0.35;
   updateMult();
 }
 
 function updateMult(){
-  document.getElementById("mult").innerText =
-    "Multiplier: x"+mult.toFixed(2);
+  document.getElementById("mult").innerText="Multiplier: x"+mult.toFixed(2);
 }
 
 function cashout(){
-  if(!gameOn) return;
+  if(!gameOn)return;
 
-  balance += bet * mult;
+  balance+=bet*mult;
   updateBal();
 
-  document.getElementById("mineRes").innerText =
-    "CASHED OUT";
-
+  document.getElementById("mineRes").innerText="CASHED OUT";
   gameOn=false;
   document.getElementById("cashBtn").disabled=true;
 }
 
 function reveal(){
-  let buttons=document.querySelectorAll("#grid button");
-
-  buttons.forEach((b,i)=>{
-    if(mines[i]) b.innerText="💣";
-  });
+  let bs=document.querySelectorAll("#grid button");
+  bs.forEach((b,i)=>{if(mines[i])b.innerText="💣";});
 }
 
 updateBal();
