@@ -1,26 +1,75 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Casino Dice</title>
+  <title>AetherBet</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: radial-gradient(circle at top, #0b0f1a, #05060a);
+      color: white;
+      text-align: center;
+    }
+
+    h1 {
+      color: #00f5ff;
+      margin-top: 40px;
+      letter-spacing: 3px;
+    }
+
+    input {
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.05);
+      color: white;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      margin-left: 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(90deg, #6c2bd9, #00f5ff);
+      color: white;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    #result {
+      margin-top: 20px;
+      color: #00f5ff;
+    }
+  </style>
 </head>
+
 <body>
 
-  <h1>Casino Dice</h1>
+  <h1>AETHERBET</h1>
 
-  <p id="status">Loading backend...</p>
+  <p id="status">Connecting...</p>
 
-  <input id="amount" type="number" placeholder="Bet amount" />
-  <button onclick="bet()">Roll Dice</button>
+  <input id="amount" type="number" placeholder="Bet amount">
+  <button onclick="bet()">Roll</button>
 
-  <p id="result"></p>
+  <div id="result"></div>
 
   <script>
     const API = "https://casino-backend-hhbs.onrender.com";
 
     async function check() {
-      const res = await fetch(API + "/");
-      const text = await res.text();
-      document.getElementById("status").innerText = text;
+      try {
+        const res = await fetch(API + "/");
+        const text = await res.text();
+        document.getElementById("status").innerText = text;
+      } catch (e) {
+        document.getElementById("status").innerText = "Backend offline";
+      }
     }
 
     async function bet() {
@@ -34,8 +83,13 @@
 
       const data = await res.json();
 
+      if (data.error) {
+        document.getElementById("result").innerText = data.error;
+        return;
+      }
+
       document.getElementById("result").innerText =
-        `Roll: ${data.roll} | Win: ${data.win} | Balance: ${data.balance}`;
+        `Roll: ${data.roll} | ${data.win ? "WIN" : "LOSE"} | Balance: ${data.balance}`;
     }
 
     check();
