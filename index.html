@@ -1,126 +1,193 @@
-body {
-  margin: 0;
-  font-family: Arial;
-  background:
-    radial-gradient(circle at 20% 20%, rgba(108,43,217,0.15), transparent 40%),
-    radial-gradient(circle at 80% 10%, rgba(0,245,255,0.10), transparent 35%),
-    radial-gradient(circle at top, #0b0f1a, #05060a);
-  color: white;
-  overflow: hidden;
-}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>AetherBet</title>
 
-/* TOPBAR */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  padding: 14px 22px;
-  background: rgba(10,12,20,0.7);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 35%),
+        radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 40%),
+        #05060a;
+      color: white;
+    }
 
-.logo {
-  color: #00f5ff;
-  font-weight: 700;
-  letter-spacing: 4px;
-  font-size: 14px;
-  opacity: 0.9;
-}
+    /* TOP BAR */
+    .topbar {
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      background: rgba(10,12,18,0.75);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
 
-/* LAYOUT */
-.layout {
-  display: flex;
-  height: 100vh;
-}
+    .logo {
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #00f5ff;
+      font-size: 13px;
+    }
 
-/* SIDEBAR */
-.sidebar {
-  width: 190px;
-  padding: 16px;
-  background: rgba(10,12,20,0.55);
-  backdrop-filter: blur(14px);
-  border-right: 1px solid rgba(255,255,255,0.03);
-}
+    .balance {
+      font-size: 12px;
+      opacity: 0.8;
+    }
 
-.item {
-  padding: 10px 12px;
-  margin: 8px 0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 13px;
-  opacity: 0.75;
-  transition: 0.15s;
-}
+    /* LAYOUT */
+    .wrap {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
 
-.item:hover {
-  background: rgba(108,43,217,0.18);
-  opacity: 1;
-  transform: translateX(3px);
-}
+    /* SIDEBAR */
+    .sidebar {
+      width: 180px;
+      padding: 14px;
+      background: rgba(10,12,18,0.55);
+      border-right: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(14px);
+    }
 
-/* MAIN */
-.main {
-  flex: 1;
-  padding: 26px;
-}
+    .nav {
+      font-size: 12px;
+      padding: 10px;
+      margin-bottom: 6px;
+      border-radius: 8px;
+      opacity: 0.7;
+      cursor: pointer;
+      transition: 0.15s;
+    }
 
-.main h2 {
-  font-weight: 500;
-  font-size: 16px;
-  opacity: 0.8;
-  margin-bottom: 18px;
-}
+    .nav:hover {
+      background: rgba(0,245,255,0.08);
+      opacity: 1;
+    }
 
-/* GRID */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-}
+    /* MAIN */
+    .main {
+      flex: 1;
+      padding: 18px;
+    }
 
-/* CARDS */
-.card {
-  height: 110px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.05);
-  backdrop-filter: blur(16px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  letter-spacing: 0.5px;
-  opacity: 0.85;
-  cursor: pointer;
-  transition: 0.18s;
-}
+    .title {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-bottom: 14px;
+    }
 
-.card:hover {
-  transform: translateY(-3px) scale(1.02);
-  border: 1px solid rgba(0,245,255,0.25);
-  box-shadow:
-    0 10px 30px rgba(0,0,0,0.4),
-    0 0 18px rgba(0,245,255,0.08);
-  opacity: 1;
-}
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
 
-/* RIGHT PANEL */
-.right {
-  width: 210px;
-  padding: 16px;
-  background: rgba(10,12,20,0.55);
-  backdrop-filter: blur(14px);
-  border-left: 1px solid rgba(255,255,255,0.03);
-}
+    .card {
+      height: 120px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      opacity: 0.85;
+      cursor: pointer;
+      transition: 0.18s;
+      position: relative;
+      overflow: hidden;
+    }
 
-.right h3 {
-  font-size: 13px;
-  opacity: 0.6;
-  font-weight: 400;
-}
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(0,245,255,0.25);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      opacity: 1;
+    }
 
-.live {
-  font-size: 11px;
-  opacity: 0.55;
-  margin: 10px 0;
-}
+    /* subtle glow strip */
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      top: 0;
+      left: 0;
+      background: linear-gradient(90deg, #6c2bd9, #00f5ff);
+      opacity: 0.6;
+    }
+
+    /* RIGHT */
+    .right {
+      width: 200px;
+      padding: 14px;
+      background: rgba(10,12,18,0.55);
+      border-left: 1px solid rgba(255,255,255,0.04);
+      backdrop-filter: blur(14px);
+    }
+
+    .live-title {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-bottom: 10px;
+    }
+
+    .live {
+      font-size: 11px;
+      opacity: 0.6;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- TOP -->
+  <div class="topbar">
+    <div class="logo">AETHERBET</div>
+    <div class="balance">Balance: 100</div>
+  </div>
+
+  <!-- BODY -->
+  <div class="wrap">
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="nav">Home</div>
+      <div class="nav">Dice</div>
+      <div class="nav">Crash</div>
+      <div class="nav">Slots</div>
+      <div class="nav">Plinko</div>
+    </div>
+
+    <!-- MAIN -->
+    <div class="main">
+      <div class="title">Games</div>
+
+      <div class="grid">
+        <div class="card">🎲 Dice</div>
+        <div class="card">🚀 Crash</div>
+        <div class="card">🎰 Slots</div>
+        <div class="card">⚡ Plinko</div>
+        <div class="card">🌌 Roulette</div>
+        <div class="card">🪐 Mines</div>
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="right">
+      <div class="live-title">Live Activity</div>
+      <div class="live">Nova won 2.1x</div>
+      <div class="live">Astra hit 4.8x</div>
+      <div class="live">Void won 1.6x</div>
+    </div>
+
+  </div>
+
+</body>
+</html>
