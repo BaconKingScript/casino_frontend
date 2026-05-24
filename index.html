@@ -15,7 +15,6 @@
       overflow: hidden;
     }
 
-    /* TOPBAR */
     .topbar {
       height: 56px;
       display: flex;
@@ -24,13 +23,11 @@
       padding: 0 18px;
       background: rgba(10,12,18,0.75);
       border-bottom: 1px solid rgba(255,255,255,0.05);
-      backdrop-filter: blur(12px);
     }
 
     .logo {
-      font-weight: 700;
-      letter-spacing: 3px;
       color: #00f5ff;
+      font-weight: bold;
       cursor: pointer;
     }
 
@@ -39,44 +36,41 @@
       opacity: 0.8;
     }
 
-    /* LAYOUT */
     .layout {
       display: flex;
       height: calc(100vh - 56px);
     }
 
-    /* SIDEBAR */
     .sidebar {
       width: 180px;
-      background: rgba(10,12,18,0.55);
-      border-right: 1px solid rgba(255,255,255,0.04);
       padding: 12px;
+      background: rgba(10,12,18,0.5);
+      border-right: 1px solid rgba(255,255,255,0.05);
     }
 
     .nav {
       padding: 10px;
       font-size: 12px;
-      opacity: 0.7;
       cursor: pointer;
-      border-radius: 8px;
+      opacity: 0.7;
     }
 
     .nav:hover {
-      background: rgba(0,245,255,0.08);
       opacity: 1;
+      background: rgba(0,245,255,0.08);
     }
 
-    /* MAIN */
     .main {
       flex: 1;
       padding: 18px;
-      overflow-y: auto;
     }
 
-    .title {
-      font-size: 13px;
-      opacity: 0.7;
-      margin-bottom: 14px;
+    .page {
+      display: none;
+    }
+
+    .active {
+      display: block;
     }
 
     .grid {
@@ -87,28 +81,13 @@
 
     .card {
       height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border-radius: 12px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: center;
       cursor: pointer;
-      transition: 0.15s;
-    }
-
-    .card:hover {
-      transform: translateY(-3px);
-      border-color: rgba(0,245,255,0.25);
-    }
-
-    /* PAGES */
-    .page {
-      display: none;
-    }
-
-    .active {
-      display: block;
     }
 
     input {
@@ -121,10 +100,10 @@
     }
 
     button {
-      padding: 10px 16px;
+      padding: 10px 15px;
       margin-top: 10px;
-      border: none;
       border-radius: 10px;
+      border: none;
       cursor: pointer;
       background: linear-gradient(90deg, #6c2bd9, #00f5ff);
       color: white;
@@ -148,6 +127,7 @@
     <div class="nav" onclick="go('dice')">Dice</div>
     <div class="nav" onclick="go('crash')">Crash</div>
     <div class="nav" onclick="go('slots')">Slots</div>
+    <div class="nav" onclick="go('mines')">Mines</div>
   </div>
 
   <!-- MAIN -->
@@ -155,19 +135,19 @@
 
     <!-- HOME -->
     <div id="home" class="page active">
-      <div class="title">Games</div>
-
+      <h2>Games</h2>
       <div class="grid">
         <div class="card" onclick="go('dice')">🎲 Dice</div>
         <div class="card" onclick="go('crash')">🚀 Crash</div>
         <div class="card" onclick="go('slots')">🎰 Slots</div>
+        <div class="card" onclick="go('mines')">💣 Mines</div>
       </div>
     </div>
 
     <!-- DICE -->
     <div id="dice" class="page">
       <h2>Dice</h2>
-      <input id="bet" type="number" placeholder="Bet amount">
+      <input id="bet" type="number" placeholder="Bet">
       <button onclick="dice()">Roll</button>
       <p id="diceRes"></p>
     </div>
@@ -186,17 +166,38 @@
       <p id="slotsRes"></p>
     </div>
 
+    <!-- MINES -->
+    <div id="mines" class="page">
+      <h2>Mines</h2>
+
+      <input id="mineBet" type="number" placeholder="Bet">
+      <button onclick="startMines()">Start</button>
+
+      <p id="mineInfo"></p>
+
+      <div id="mineGrid" style="display:grid;grid-template-columns:repeat(5,50px);gap:8px;margin-top:10px;"></div>
+
+      <p id="mineResult"></p>
+    </div>
+
   </div>
 </div>
 
+<!-- ================= JAVASCRIPT GOES HERE ================= -->
 <script>
-let balance = 100;
 
+let balance = 100;
+let mines = [];
+let gameOn = false;
+let bet = 0;
+let revealed = 0;
+
+/* BALANCE */
 function updateBalance() {
   document.getElementById("bal").innerText = balance;
 }
 
-/* NAVIGATION */
+/* NAV */
 function go(page) {
   document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
   document.getElementById(page).classList.add("active");
@@ -205,18 +206,16 @@ function go(page) {
 /* DICE */
 function dice() {
   let bet = Number(document.getElementById("bet").value);
-  if (!bet || bet <= 0) return;
+  if (!bet || bet > balance) return;
 
   let roll = Math.random() * 100;
 
   if (roll < 50) {
     balance += bet;
-    document.getElementById("diceRes").innerText =
-      "WIN (" + roll.toFixed(2) + ")";
+    document.getElementById("diceRes").innerText = "WIN " + roll.toFixed(2);
   } else {
     balance -= bet;
-    document.getElementById("diceRes").innerText =
-      "LOSE (" + roll.toFixed(2) + ")";
+    document.getElementById("diceRes").innerText = "LOSE " + roll.toFixed(2);
   }
 
   updateBalance();
@@ -230,25 +229,104 @@ function crash() {
 
 /* SLOTS */
 function slots() {
-  let s = ["🍒","🍋","💎","7","⭐"];
+  let s = ["🍒","💎","7","🍋"];
   let a = s[Math.floor(Math.random()*s.length)];
   let b = s[Math.floor(Math.random()*s.length)];
   let c = s[Math.floor(Math.random()*s.length)];
 
-  let result = a + " " + b + " " + c;
+  let res = a + " " + b + " " + c;
 
   if (a === b && b === c) {
     balance += 20;
-    document.getElementById("slotsRes").innerText = result + " JACKPOT +20";
+    document.getElementById("slotsRes").innerText = res + " JACKPOT +20";
   } else {
     balance -= 5;
-    document.getElementById("slotsRes").innerText = result + " -5";
+    document.getElementById("slotsRes").innerText = res + " -5";
   }
 
   updateBalance();
 }
 
+/* MINES */
+function startMines() {
+  bet = Number(document.getElementById("mineBet").value);
+  if (!bet || bet > balance) return;
+
+  balance -= bet;
+  updateBalance();
+
+  mines = [];
+  revealed = 0;
+  gameOn = true;
+
+  document.getElementById("mineResult").innerText = "";
+  document.getElementById("mineInfo").innerText = "Avoid bombs!";
+
+  // create grid
+  for (let i = 0; i < 25; i++) mines.push(false);
+
+  // place bombs
+  let bombs = 5;
+  while (bombs > 0) {
+    let i = Math.floor(Math.random() * 25);
+    if (!mines[i]) {
+      mines[i] = true;
+      bombs--;
+    }
+  }
+
+  renderMines();
+}
+
+function renderMines() {
+  const grid = document.getElementById("mineGrid");
+  grid.innerHTML = "";
+
+  for (let i = 0; i < 25; i++) {
+    let btn = document.createElement("button");
+
+    btn.style.width = "50px";
+    btn.style.height = "50px";
+    btn.innerText = "?";
+
+    btn.onclick = () => clickMine(i, btn);
+
+    grid.appendChild(btn);
+  }
+}
+
+function clickMine(i, btn) {
+  if (!gameOn) return;
+
+  if (mines[i]) {
+    btn.innerText = "💣";
+    btn.style.background = "red";
+    document.getElementById("mineResult").innerText = "YOU LOST";
+    gameOn = false;
+    revealAll();
+    return;
+  }
+
+  btn.innerText = "💎";
+  btn.style.background = "green";
+  btn.disabled = true;
+
+  revealed++;
+
+  document.getElementById("mineResult").innerText =
+    "Safe! tiles: " + revealed;
+}
+
+function revealAll() {
+  let buttons = document.querySelectorAll("#mineGrid button");
+  buttons.forEach((b, i) => {
+    if (mines[i]) b.innerText = "💣";
+  });
+}
+
 updateBalance();
+go("home");
+
 </script>
 
 </body>
