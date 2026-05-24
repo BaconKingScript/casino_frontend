@@ -8,19 +8,20 @@
       margin: 0;
       font-family: Inter, Arial, sans-serif;
       background:
-        radial-gradient(circle at 20% 10%, rgba(0,245,255,0.08), transparent 35%),
-        radial-gradient(circle at 80% 20%, rgba(108,43,217,0.10), transparent 40%),
+        radial-gradient(circle at 15% 20%, rgba(0,245,255,0.08), transparent 40%),
+        radial-gradient(circle at 85% 10%, rgba(108,43,217,0.10), transparent 45%),
         #05060a;
       color: white;
+      overflow-x: hidden;
     }
 
     /* TOP BAR */
     .topbar {
-      height: 56px;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 18px;
+      padding: 0 20px;
       background: rgba(10,12,18,0.75);
       backdrop-filter: blur(14px);
       border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -28,25 +29,25 @@
 
     .logo {
       font-weight: 700;
-      letter-spacing: 3px;
+      letter-spacing: 4px;
       color: #00f5ff;
       font-size: 13px;
     }
 
-    .balance {
+    .wallet {
       font-size: 12px;
       opacity: 0.8;
     }
 
     /* LAYOUT */
-    .wrap {
+    .layout {
       display: flex;
-      height: calc(100vh - 56px);
+      height: calc(100vh - 60px);
     }
 
     /* SIDEBAR */
     .sidebar {
-      width: 180px;
+      width: 190px;
       padding: 14px;
       background: rgba(10,12,18,0.55);
       border-right: 1px solid rgba(255,255,255,0.04);
@@ -54,11 +55,10 @@
     }
 
     .nav {
-      font-size: 12px;
       padding: 10px;
-      margin-bottom: 6px;
-      border-radius: 8px;
+      font-size: 12px;
       opacity: 0.7;
+      border-radius: 8px;
       cursor: pointer;
       transition: 0.15s;
     }
@@ -71,34 +71,33 @@
     /* MAIN */
     .main {
       flex: 1;
-      padding: 18px;
+      padding: 20px;
     }
 
     .title {
       font-size: 14px;
       opacity: 0.7;
-      margin-bottom: 14px;
+      margin-bottom: 15px;
     }
 
-    /* GRID */
+    /* GAME GRID */
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
+      gap: 14px;
     }
 
     .card {
-      height: 120px;
-      border-radius: 12px;
+      height: 130px;
+      border-radius: 14px;
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.05);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 13px;
-      opacity: 0.85;
+      font-size: 14px;
       cursor: pointer;
-      transition: 0.18s;
+      transition: 0.2s;
       position: relative;
       overflow: hidden;
     }
@@ -107,24 +106,21 @@
       transform: translateY(-3px);
       border-color: rgba(0,245,255,0.25);
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-      opacity: 1;
     }
 
-    /* subtle glow strip */
     .card::before {
       content: "";
       position: absolute;
+      top: 0;
       width: 100%;
       height: 2px;
-      top: 0;
-      left: 0;
       background: linear-gradient(90deg, #6c2bd9, #00f5ff);
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
-    /* RIGHT */
+    /* RIGHT PANEL */
     .right {
-      width: 200px;
+      width: 210px;
       padding: 14px;
       background: rgba(10,12,18,0.55);
       border-left: 1px solid rgba(255,255,255,0.04);
@@ -142,6 +138,24 @@
       opacity: 0.6;
       margin: 8px 0;
     }
+
+    /* HERO */
+    .hero {
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      font-size: 22px;
+      margin: 0;
+      color: #00f5ff;
+      letter-spacing: 2px;
+    }
+
+    .hero p {
+      font-size: 12px;
+      opacity: 0.6;
+      margin-top: 5px;
+    }
   </style>
 </head>
 
@@ -150,11 +164,11 @@
   <!-- TOP -->
   <div class="topbar">
     <div class="logo">AETHERBET</div>
-    <div class="balance">Balance: 100</div>
+    <div class="wallet">Wallet: 100</div>
   </div>
 
   <!-- BODY -->
-  <div class="wrap">
+  <div class="layout">
 
     <!-- SIDEBAR -->
     <div class="sidebar">
@@ -167,6 +181,12 @@
 
     <!-- MAIN -->
     <div class="main">
+
+      <div class="hero">
+        <h1>Play Beyond Reality</h1>
+        <p>Cosmic casino experience powered by AetherBet</p>
+      </div>
+
       <div class="title">Games</div>
 
       <div class="grid">
@@ -177,14 +197,15 @@
         <div class="card">🌌 Roulette</div>
         <div class="card">🪐 Mines</div>
       </div>
+
     </div>
 
     <!-- RIGHT -->
     <div class="right">
-      <div class="live-title">Live Activity</div>
-      <div class="live">Nova won 2.1x</div>
-      <div class="live">Astra hit 4.8x</div>
-      <div class="live">Void won 1.6x</div>
+      <div class="live-title">Live Wins</div>
+      <div class="live">Nova hit 2.4x</div>
+      <div class="live">Astra won 5.1x</div>
+      <div class="live">Void hit 1.8x</div>
     </div>
 
   </div>
